@@ -1,5 +1,6 @@
 
 public class Node {
+	public int RADIUS = 20;
 	private int id;
 	private int initX;
 	private int initY;

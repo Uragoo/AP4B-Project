@@ -25,6 +25,7 @@ public class GraphVisualizer extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				isDragging = false;
 			}
+			
 		});
 		
 		addMouseMotionListener(new MouseAdapter() {
@@ -39,6 +40,18 @@ public class GraphVisualizer extends JPanel {
 					
 					repaint();
 				}
+			}
+			
+			public void mouseMoved(MouseEvent e) {
+				int x = e.getX();
+		        int y = e.getY();
+		        
+		        for (Node node : graph.getNodes()) {
+		        	if (isInsideNode(node, x, y)) {
+		        		handleNodeHover(node);
+		        		break;
+		        	}
+		        }
 			}
 		});
 		
@@ -93,48 +106,61 @@ public class GraphVisualizer extends JPanel {
 				Node node = graph.getNode(getNextId() - 1);
 				System.out.print("Node x : " + node.getX() + " y : " + node.getY());
 				int nodeRadius = 20;
-				repaint(node.getX() - nodeRadius, node.getY() - nodeRadius, nodeRadius * 2, nodeRadius * 2);
+				
+				repaint(node.getX() - node.RADIUS, node.getY() - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);
 				removeMouseListener(this);
 			}
 		});
 	}
 	
-	public void paintVertex(Graphics g, Node node) {
-		int centerX = getWidth() / 2;
-		int centerY = getHeight() / 2;
+	public void selectVertex() {
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				for (Node node : graph.getNodes()) {
+					if (isInsideNode(node, x, y)) {
+						handleNodeSelection(node);
+						break;
+					}
+				}
+			}
+		});
+	}
+	
+	private boolean isInsideNode(Node node, int x, int y) {
+		int nodeRadius = node.RADIUS;
+		int nodeX = node.getX();
+		int nodeY = node.getY();
 		
+		
+		return x <= nodeX + nodeRadius && x >= nodeX - nodeRadius && y <= nodeY + nodeRadius && y >= nodeY - nodeRadius;
+	}
+	
+	private void handleNodeSelection(Node node) {
+		System.out.print("Node clicked\n");
+	}
+	
+	private void handleNodeHover(Node node) {
+		int nodeId = node.getId();
+		
+		Graphics g = this.getGraphics();
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.scale(scaleFactor, scaleFactor);
-		g2d.translate(centerX, centerY);
+		g2d.setColor(Color.WHITE);
+		g2d.drawString(Integer.toString(nodeId), node.getX()-(node.RADIUS/5), node.getY()+(node.RADIUS/5));
+		System.out.print("Node hovered\n");
 	}
 	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		int centerX = getWidth() / 2;
-		int centerY = getHeight() / 2;
-		
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.scale(scaleFactor, scaleFactor);
-		g2d.translate(centerX, centerY);
 		
 		List<Node> nodes = graph.getNodes();
 		int nodeRadius = 20;
-		
-		//On dessine les sommets
-		for (Node node : nodes) {
-			int nodeId = node.getId();
-			int x = node.getX();
-			int y = node.getY();
-			
-			g2d.setColor(Color.BLUE);
-			g2d.fillOval(x - nodeRadius, y - nodeRadius, nodeRadius * 2, nodeRadius * 2);
-			
-			g2d.setColor(Color.WHITE);
-			g2d.drawString(Integer.toString(nodeId), x, y);
-			
-		}
 		
 		//On dessine les  arrêtes
 		List<Node> allNodes = graph.getNodes();
@@ -151,5 +177,17 @@ public class GraphVisualizer extends JPanel {
 				g2d.drawLine(x1, y1, x2, y2);
 			}
 		}
+		
+		//On dessine les sommets
+		for (Node node : nodes) {
+			int nodeId = node.getId();
+			int x = node.getX();
+			int y = node.getY();
+			
+			g2d.setColor(Color.BLUE);
+			g2d.fillOval(x - node.RADIUS, y - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);			
+		}
+		
+		
 	}
 }

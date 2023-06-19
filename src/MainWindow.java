@@ -2,6 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -10,11 +12,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 @SuppressWarnings("serial")
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements KeyListener {
 	private GraphVisualizer graphVisualizer;
 	private MenuBar menuBar;
-	private PanelSettings panelS;
-	private PanelInfo panelI;
 	
 	public MainWindow(GraphVisualizer graphVisualizer) {
 		this.graphVisualizer = graphVisualizer;
@@ -45,24 +45,32 @@ public class MainWindow extends JFrame {
 		});
 		setJMenuBar(menuBar);
 		
-		int h = 200;
-		int l = 1760;
-		panelS = new PanelSettings();
-		panelS.setPreferredSize(new Dimension(l, h));
-		getContentPane().add(panelS, BorderLayout.SOUTH);
-		
-		h = 990;
-		l = 300;
-		panelI = new PanelInfo();
-		panelI.setPreferredSize(new Dimension(l, h));
-		getContentPane().add(panelI, BorderLayout.EAST);
-		
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				dispose();
 			}
 		});
 		
+		addKeyListener(this);
+		
 		setVisible(true);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
