@@ -59,7 +59,28 @@ public class MainWindow extends JFrame implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		switch (e.getKeyChar()) {
+		case 'a':
+				graphVisualizer.addVertex();
+				break;
+		case 'e':
+				//Add Edge
+				break;
+		case 'r':
+				//Remove Vertex
+				break;
+		case 't':
+				//Remove Edge
+				break;
+		case 's':
+				//Set Start Node
+				break;
+		case 'f':
+				//Set Finish Node
+				break;
+		default:
+			break;
+		}
 	}
 
 	@Override

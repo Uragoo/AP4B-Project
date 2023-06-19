@@ -99,16 +99,17 @@ public class GraphVisualizer extends JPanel {
 		
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-				System.out.print(" current x = " + x + " current y = " + y + "\n");
-				graph.addNode(getNextId(), x, y);
-				Node node = graph.getNode(getNextId() - 1);
-				System.out.print("Node x : " + node.getX() + " y : " + node.getY());
-				int nodeRadius = 20;
-				
-				repaint(node.getX() - node.RADIUS, node.getY() - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);
-				removeMouseListener(this);
+				if (e.getClickCount() == 1) {
+					
+					int x = e.getX();
+					int y = e.getY();
+					int nodeId = getNextId();
+					graph.addNode(nodeId, x, y);
+					Node node = graph.getNode(nodeId);
+					
+					repaint(node.getX() - node.RADIUS, node.getY() - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);
+					removeMouseListener(this);
+				}
 			}
 		});
 	}
@@ -139,7 +140,7 @@ public class GraphVisualizer extends JPanel {
 	}
 	
 	private void handleNodeSelection(Node node) {
-		System.out.print("Node clicked\n");
+		//System.out.print("Node clicked\n");
 	}
 	
 	private void handleNodeHover(Node node) {
@@ -149,7 +150,7 @@ public class GraphVisualizer extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(Integer.toString(nodeId), node.getX()-(node.RADIUS/5), node.getY()+(node.RADIUS/5));
-		System.out.print("Node hovered\n");
+		//System.out.print("Node hovered\n");
 	}
 	
 	@Override
