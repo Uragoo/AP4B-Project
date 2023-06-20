@@ -1,4 +1,3 @@
-
 public class GraphEditor {
 	public static MainWindow mainWindow;
 	private static Graph graph;
@@ -14,9 +13,5 @@ public class GraphEditor {
 		
 		mainWindow = new MainWindow(visualizer);
 		
-		//String outputPath = "E:\\Users\\theo-\\eclipse-workspace\\Projet AP4B";
-		//String outputFile = "save.txt";
-		
-		//Application.saveGraphInFile(outputPath, outputFile, graph);
 	}
 }

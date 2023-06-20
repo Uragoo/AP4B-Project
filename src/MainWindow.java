@@ -1,5 +1,3 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -43,6 +41,15 @@ public class MainWindow extends JFrame implements KeyListener {
 				graphVisualizer.addVertex();
 			}
 		});
+		/*menuBar.getImportItem().addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent ev) {
+				graphVisualizer = new GraphVisualizer(Application.getGraphFromFile());
+				repaint();
+			}
+			
+		});*/
+		
 		setJMenuBar(menuBar);
 		
 		addWindowListener(new WindowAdapter() {
@@ -61,23 +68,28 @@ public class MainWindow extends JFrame implements KeyListener {
 		// TODO Auto-generated method stub
 		switch (e.getKeyChar()) {
 		case 'a':
-				graphVisualizer.addVertex();
-				break;
+			graphVisualizer.addVertex();
+			break;
 		case 'e':
-				graphVisualizer.addEdge();
-				break;
+			graphVisualizer.addEdge();
+			break;
 		case 'r':
-				graphVisualizer.removeVertex();
-				break;
+			graphVisualizer.removeVertex();
+			break;
 		case 't':
-				graphVisualizer.removeEdge();
-				break;
+			graphVisualizer.removeEdge();
+			break;
 		case 's':
-				graphVisualizer.setStartNode();
-				break;
+			graphVisualizer.setStartNode();
+			break;
 		case 'f':
-				graphVisualizer.setEndNode();
-				break;
+			graphVisualizer.setEndNode();
+			break;
+		case '':
+			System.out.print("ALLO ??");
+			removeMouseListener(graphVisualizer.activeListener);
+			graphVisualizer.activeListener = null;
+			break;
 		default:
 			break;
 		}

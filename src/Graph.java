@@ -66,7 +66,9 @@ public class Graph {
 	public void removeNode(Node n) {
 		for (int i = 1; i < nodes.size(); i++) {
 			List<Node> voisins = adjacents.get(getNode(i));
-			voisins.remove(n);
+			if (voisins != null) {
+				voisins.remove(n);
+			}
 		}
 		nodes.remove(n.getId());
 	}

@@ -11,24 +11,29 @@ public class Application {
 	public static Graph getGraphFromFile(String file) {
 		Graph graph = new Graph();
 		
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split(" ");
-				if (parts.length == 3) {
-					int nodeId = Integer.parseInt(parts[0]);
-					int nodeX = Integer.parseInt(parts[1]);
-					int nodeY = Integer.parseInt(parts[2]);
-					graph.addNode(nodeId, nodeX, nodeY);
-				} else if (parts.length == 2) {
-					int sourceId = Integer.parseInt(parts[0]);
-					int targetId = Integer.parseInt(parts[1]);
-					graph.addEdge(sourceId, targetId);
+		//JFileChooser fileChooser = new JFileChooser();
+		//fileChooser.setSelectedFile(new File("fileToSave.txt"));
+		//int retrival = fileChooser.showSaveDialog(GraphEditor.mainWindow);
+		//if (retrival == JFileChooser.APPROVE_OPTION) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(file))) { //fileChooser.getSelectedFile()
+				String line;
+				while ((line = reader.readLine()) != null) {
+					String[] parts = line.split(" ");
+					if (parts.length == 3) {
+						int nodeId = Integer.parseInt(parts[0]);
+						int nodeX = Integer.parseInt(parts[1]);
+						int nodeY = Integer.parseInt(parts[2]);
+						graph.addNode(nodeId, nodeX, nodeY);
+					} else if (parts.length == 2) {
+						int sourceId = Integer.parseInt(parts[0]);
+						int targetId = Integer.parseInt(parts[1]);
+						graph.addEdge(sourceId, targetId);
+					}
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//}
 		return graph;
 	}
 	

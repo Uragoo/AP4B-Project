@@ -10,6 +10,7 @@ public class GraphVisualizer extends JPanel {
 	private int initialMouseX;
 	private int initialMouseY;
 	private boolean isDragging = false;
+	public MouseListener activeListener;
 	
 	@SuppressWarnings("static-access")
 	public GraphVisualizer(Graph graph) {
@@ -85,7 +86,7 @@ public class GraphVisualizer extends JPanel {
 	}
 	
 	public void setStartNode() {
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
@@ -98,11 +99,14 @@ public class GraphVisualizer extends JPanel {
 					}
 				}
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	public void setEndNode() {
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
@@ -115,7 +119,10 @@ public class GraphVisualizer extends JPanel {
 					}
 				}
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	private boolean isInsideNode(Node node, int x, int y) {
@@ -127,16 +134,11 @@ public class GraphVisualizer extends JPanel {
 		return x <= nodeX + nodeRadius && x >= nodeX - nodeRadius && y <= nodeY + nodeRadius && y >= nodeY - nodeRadius;
 	}
 	
-	private boolean isOnEdge(int startX, int startY, int endX, int endY, int x, int y) {
-		//double distance = pointToLineDistance(x, y, startX, startY, endX, endY);
-		return true;
-	}
-	
 	public void addVertex() {
-		
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 1) {
+					
 					
 					int x = e.getX();
 					int y = e.getY();
@@ -148,11 +150,14 @@ public class GraphVisualizer extends JPanel {
 					removeMouseListener(this);
 				}
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	public void selectVertex() {
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
@@ -163,11 +168,14 @@ public class GraphVisualizer extends JPanel {
 					}
 				}
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	public void removeVertex() {
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
@@ -181,11 +189,14 @@ public class GraphVisualizer extends JPanel {
 				}
 				removeMouseListener(this);
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	public void addEdge() {
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			Node node1;
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
@@ -218,11 +229,14 @@ public class GraphVisualizer extends JPanel {
 					}
 				}
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	public void removeEdge() {
-		addMouseListener(new MouseAdapter() {
+		MouseListener ml = new MouseAdapter() {
 			Node node1;
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
@@ -240,7 +254,10 @@ public class GraphVisualizer extends JPanel {
 					}
 				}
 			}
-		});
+		};
+		removeMouseListener(activeListener);
+		activeListener = ml;
+		addMouseListener(ml);
 	}
 	
 	

@@ -7,7 +7,7 @@ public class MenuBar extends JMenuBar {
 	private JMenu fileMenu, editorMenu, help;
 	
 	/** The exit. */
-	private JMenuItem fileExportItinerary, fileChangeMap, about, helpitem, exit, addVertex; 
+	private JMenuItem fileExportGraph, fileImportGraph, about, helpitem, exit, addVertex; 
 		
 	/**
 	 * Instantiates a new menu bar.
@@ -18,10 +18,10 @@ public class MenuBar extends JMenuBar {
 	
 		
 		exit = new JMenuItem("Exit");
-		fileExportItinerary = new JMenuItem("Export Itinerary");
-		fileChangeMap = new JMenuItem("Change Map");		
-		fileMenu.add(fileExportItinerary);
-		fileMenu.add(fileChangeMap);
+		fileExportGraph = new JMenuItem("Export Graph");
+		fileImportGraph = new JMenuItem("Import Graph");		
+		fileMenu.add(fileExportGraph);
+		fileMenu.add(fileImportGraph);
 		fileMenu.add(exit);
 		
 		
@@ -39,7 +39,7 @@ public class MenuBar extends JMenuBar {
 		add(editorMenu);
 		add(help);
 		
-		fileExportItinerary.addActionListener(new ActionListener() {
+		fileExportGraph.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				Application.saveGraphInFile(GraphVisualizer.getGraph());
 			}
@@ -53,7 +53,11 @@ public class MenuBar extends JMenuBar {
 	 * @return the export item
 	 */
 	public JMenuItem getExportItem(){
-		return fileExportItinerary;
+		return fileExportGraph;
+	}
+	
+	public JMenuItem getImportItem(){
+		return fileImportGraph;
 	}
 	
 	
@@ -66,7 +70,7 @@ public class MenuBar extends JMenuBar {
 	 * @return the items
 	 */
 	public JMenuItem[] getItems(){
-		return new JMenuItem[]{fileExportItinerary, fileChangeMap, addVertex, about, helpitem, exit};
+		return new JMenuItem[]{fileExportGraph, fileImportGraph, addVertex, about, helpitem, exit};
 		
 	}
 }
