@@ -73,10 +73,10 @@ public class MainWindow extends JFrame implements KeyListener {
 				graphVisualizer.removeEdge();
 				break;
 		case 's':
-				//Set Start Node
+				graphVisualizer.setStartNode();
 				break;
 		case 'f':
-				//Set Finish Node
+				graphVisualizer.setEndNode();
 				break;
 		default:
 			break;

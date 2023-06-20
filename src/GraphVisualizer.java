@@ -84,6 +84,40 @@ public class GraphVisualizer extends JPanel {
 		return maxId + 1;
 	}
 	
+	public void setStartNode() {
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				for (Node node : graph.getNodes()) {
+					if (isInsideNode(node, x, y)) {
+						graph.startNode = node;
+						repaint();
+						removeMouseListener(this);
+					}
+				}
+			}
+		});
+	}
+	
+	public void setEndNode() {
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				for (Node node : graph.getNodes()) {
+					if (isInsideNode(node, x, y)) {
+						graph.endNode = node;
+						repaint();
+						removeMouseListener(this);
+					}
+				}
+			}
+		});
+	}
+	
 	private boolean isInsideNode(Node node, int x, int y) {
 		int nodeRadius = node.RADIUS;
 		int nodeX = node.getX();
@@ -262,7 +296,6 @@ public class GraphVisualizer extends JPanel {
 			} else {
 				g2d.setColor(Color.BLUE);
 			}
-			g2d.setColor(Color.BLUE);
 			g2d.fillOval(x - node.RADIUS, y - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);			
 		}
 		

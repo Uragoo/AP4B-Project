@@ -31,6 +31,31 @@ public class Graph {
     public void setY(int y) {
         this.y = y;
     }
+    
+    public List<Node> getNodes() {
+		return new ArrayList<>(nodes.values());
+	}
+	
+	public Node getNode(int id) {
+		return nodes.get(id);
+	}
+
+	public List<Node> getVoisins(Node node) {
+		List<Node> voisins = adjacents.get(node);
+		if (voisins == null) {
+			return new ArrayList<>();
+		}
+		return new ArrayList<>(voisins);
+	}
+	
+	public void moveGraph(int dx, int dy) {
+    	x += dx;
+    	y = dy;
+    	
+    	for (Node node : nodes.values()) {
+    		node.move(dx, dy);
+    	}
+    }
 	
 	public void addNode(int id, int x, int y) {
 		Node node = new Node(id, x, y);
@@ -61,30 +86,5 @@ public class Graph {
 		List<Node> voisins2 = adjacents.get(node2);
 		voisins1.remove(node2);
 		voisins2.remove(node1);
-	}
-
-	public List<Node> getNodes() {
-		return new ArrayList<>(nodes.values());
-	}
-	
-	public Node getNode(int id) {
-		return nodes.get(id);
-	}
-
-	public List<Node> getVoisins(Node node) {
-		List<Node> voisins = adjacents.get(node);
-		if (voisins == null) {
-			return new ArrayList<>();
-		}
-		return new ArrayList<>(voisins);
-	}
-	
-    public void moveGraph(int dx, int dy) {
-    	x += dx;
-    	y = dy;
-    	
-    	for (Node node : nodes.values()) {
-    		node.move(dx, dy);
-    	}
-    }
+	}    
 }
