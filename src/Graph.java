@@ -6,6 +6,8 @@ import java.util.Map;
 public class Graph {
 	private Map<Integer, Node> nodes;
 	private Map<Node, List<Node>> adjacents;
+	public Node startNode;
+	public Node endNode;
 	private int x;
 	private int y;
 	
@@ -36,6 +38,14 @@ public class Graph {
 		adjacents.put(node,  new ArrayList<>());
 	}
 	
+	public void removeNode(Node n) {
+		for (int i = 1; i < nodes.size(); i++) {
+			List<Node> voisins = adjacents.get(getNode(i));
+			voisins.remove(n);
+		}
+		nodes.remove(n.getId());
+	}
+	
 	public void addEdge(int sourceId, int targetId) {
 		Node source = nodes.get(sourceId);
 		Node target = nodes.get(targetId);
@@ -44,6 +54,13 @@ public class Graph {
 			List<Node> voisins = adjacents.get(source);
 			voisins.add(target);
 		}
+	}
+	
+	public void removeEdge(Node node1, Node node2) {
+		List<Node> voisins1 = adjacents.get(node1);
+		List<Node> voisins2 = adjacents.get(node2);
+		voisins1.remove(node2);
+		voisins2.remove(node1);
 	}
 
 	public List<Node> getNodes() {

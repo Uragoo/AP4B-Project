@@ -67,20 +67,9 @@ public class GraphVisualizer extends JPanel {
             }
         });
 		
-		centerWindowOnScreen();
 		setVisible(true);
 	}
-	
-	private void centerWindowOnScreen() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = screenSize.width;
-		int screenHeight = screenSize.height;
-		int windowWidth = getWidth();
-		int windowHeight = getHeight();
-		int windowX = (screenWidth - windowWidth) / 2;
-		int windowY = (screenHeight - windowHeight) / 2;
-		setLocation(windowX, windowY);
-	}
+
 	
 	public static Graph getGraph() {
 		return graph;
@@ -93,6 +82,20 @@ public class GraphVisualizer extends JPanel {
 			if (nodeId > maxId) { maxId = nodeId; }
 		}
 		return maxId + 1;
+	}
+	
+	private boolean isInsideNode(Node node, int x, int y) {
+		int nodeRadius = node.RADIUS;
+		int nodeX = node.getX();
+		int nodeY = node.getY();
+		
+		
+		return x <= nodeX + nodeRadius && x >= nodeX - nodeRadius && y <= nodeY + nodeRadius && y >= nodeY - nodeRadius;
+	}
+	
+	private boolean isOnEdge(int startX, int startY, int endX, int endY, int x, int y) {
+		//double distance = pointToLineDistance(x, y, startX, startY, endX, endY);
+		return true;
 	}
 	
 	public void addVertex() {
@@ -122,22 +125,91 @@ public class GraphVisualizer extends JPanel {
 				
 				for (Node node : graph.getNodes()) {
 					if (isInsideNode(node, x, y)) {
-						handleNodeSelection(node);
-						break;
+						removeMouseListener(this);
 					}
 				}
 			}
 		});
 	}
 	
-	private boolean isInsideNode(Node node, int x, int y) {
-		int nodeRadius = node.RADIUS;
-		int nodeX = node.getX();
-		int nodeY = node.getY();
-		
-		
-		return x <= nodeX + nodeRadius && x >= nodeX - nodeRadius && y <= nodeY + nodeRadius && y >= nodeY - nodeRadius;
+	public void removeVertex() {
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				for (Node node : graph.getNodes()) {
+					if (isInsideNode(node, x, y)) {
+						graph.removeNode(node);
+						repaint();
+						break;
+					}
+				}
+				removeMouseListener(this);
+			}
+		});
 	}
+	
+	public void addEdge() {
+		addMouseListener(new MouseAdapter() {
+			Node node1;
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				for (Node node : graph.getNodes()) {
+					if (isInsideNode(node, x, y)) {
+						if (node1 == null) {
+							node1 = node;
+						} else if (node != node1) {
+							List<Node> voisins1 = graph.getVoisins(node1);
+							List<Node> voisins2 = graph.getVoisins(node);
+							boolean exists = false;
+							for (Node voisin : voisins1) {
+								if (voisin == node) {
+									exists = true;
+								}
+							}
+							for (Node voisin : voisins2) {
+								if (voisin == node) {
+									exists = true;
+								}
+							}
+							if (!exists) {
+								graph.addEdge(node1.getId(), node.getId());
+								repaint();
+								removeMouseListener(this);
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+	
+	public void removeEdge() {
+		addMouseListener(new MouseAdapter() {
+			Node node1;
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				for (Node node : graph.getNodes()) {
+					if (isInsideNode(node, x, y)) {
+						if (node1 == null) {
+							node1 = node;
+						} else if (node != node1) {
+							graph.removeEdge(node1, node);
+							repaint();
+							removeMouseListener(this);
+						}
+					}
+				}
+			}
+		});
+	}
+	
+	
 	
 	private void handleNodeSelection(Node node) {
 		//System.out.print("Node clicked\n");
@@ -150,7 +222,6 @@ public class GraphVisualizer extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(Integer.toString(nodeId), node.getX()-(node.RADIUS/5), node.getY()+(node.RADIUS/5));
-		//System.out.print("Node hovered\n");
 	}
 	
 	@Override
@@ -181,10 +252,16 @@ public class GraphVisualizer extends JPanel {
 		
 		//On dessine les sommets
 		for (Node node : nodes) {
-			int nodeId = node.getId();
 			int x = node.getX();
 			int y = node.getY();
 			
+			if (node == graph.startNode) {
+				g2d.setColor(Color.GREEN);
+			} else if (node == graph.endNode) {
+				g2d.setColor(Color.RED);
+			} else {
+				g2d.setColor(Color.BLUE);
+			}
 			g2d.setColor(Color.BLUE);
 			g2d.fillOval(x - node.RADIUS, y - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);			
 		}

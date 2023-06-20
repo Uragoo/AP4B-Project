@@ -64,13 +64,13 @@ public class MainWindow extends JFrame implements KeyListener {
 				graphVisualizer.addVertex();
 				break;
 		case 'e':
-				//Add Edge
+				graphVisualizer.addEdge();
 				break;
 		case 'r':
-				//Remove Vertex
+				graphVisualizer.removeVertex();
 				break;
 		case 't':
-				//Remove Edge
+				graphVisualizer.removeEdge();
 				break;
 		case 's':
 				//Set Start Node
