@@ -11,6 +11,7 @@ public class GraphVisualizer extends JPanel {
 	private int initialMouseY;
 	private boolean isDragging = false;
 	public MouseListener activeListener;
+	private List<Node> shortestPath;
 	
 	@SuppressWarnings("static-access")
 	public GraphVisualizer(Graph graph) {
@@ -92,7 +93,7 @@ public class GraphVisualizer extends JPanel {
 				int y = e.getY();
 				
 				for (Node node : graph.getNodes()) {
-					if (isInsideNode(node, x, y)) {
+					if (isInsideNode(node, x, y) && node != graph.endNode) {
 						graph.startNode = node;
 						repaint();
 						removeMouseListener(this);
@@ -112,7 +113,7 @@ public class GraphVisualizer extends JPanel {
 				int y = e.getY();
 				
 				for (Node node : graph.getNodes()) {
-					if (isInsideNode(node, x, y)) {
+					if (isInsideNode(node, x, y) && node != graph.startNode) {
 						graph.endNode = node;
 						repaint();
 						removeMouseListener(this);
@@ -260,8 +261,6 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
-	
-	
 	private void handleNodeSelection(Node node) {
 		//System.out.print("Node clicked\n");
 	}
@@ -271,6 +270,7 @@ public class GraphVisualizer extends JPanel {
 		
 		Graphics g = this.getGraphics();
 		Graphics2D g2d = (Graphics2D) g;
+		g2d.scale(scaleFactor, scaleFactor);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(Integer.toString(nodeId), node.getX()-(node.RADIUS/5), node.getY()+(node.RADIUS/5));
 	}
@@ -301,6 +301,23 @@ public class GraphVisualizer extends JPanel {
 			}
 		}
 		
+		if (shortestPath != null) {
+			for (int i = 0; i < shortestPath.size() - 1; i++) {
+				Node source = shortestPath.get(i);
+				Node target = shortestPath.get(i+1);
+				List<Node> voisins = graph.getVoisins(source);
+				int x1 = source.getX();
+				int y1 = source.getY();
+				int x2 = target.getX();
+				int y2 = target.getY();
+				//System.out.print("" + source.getId() + " " + target.getId() + "\n");
+				
+				g2d.setColor(Color.magenta);
+				g2d.drawLine(x1, y1, x2, y2);
+			}
+		}
+		
+		
 		//On dessine les sommets
 		for (Node node : nodes) {
 			int x = node.getX();
@@ -317,5 +334,16 @@ public class GraphVisualizer extends JPanel {
 		}
 		
 		
+	}
+
+
+	public void getShortestPath() {
+		if (graph.startNode != null && graph.endNode != null) {
+			shortestPath = null;
+			shortestPath = graph.shortestPath(graph.startNode, graph.endNode);
+			repaint();
+		} else {
+			System.out.print("Veuillez définir les sommets de départ et d'arrivée");
+		}
 	}
 }

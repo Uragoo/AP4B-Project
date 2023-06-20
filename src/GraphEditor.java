@@ -5,7 +5,7 @@ public class GraphEditor {
 	
 	public static void main(String[] args) {
 		
-		String inputFile = "E:\\Users\\theo-\\eclipse-workspace\\Projet AP4B\\save.txt";
+		String inputFile = "E:\\Users\\theo-\\eclipse-workspace\\Projet AP4B\\fileToSave.txt";
 		
 		graph = Application.getGraphFromFile(inputFile);
 		

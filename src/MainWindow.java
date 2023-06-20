@@ -85,6 +85,9 @@ public class MainWindow extends JFrame implements KeyListener {
 		case 'f':
 			graphVisualizer.setEndNode();
 			break;
+		case 'p':
+			graphVisualizer.getShortestPath();
+			break;
 		case '':
 			System.out.print("ALLO ??");
 			removeMouseListener(graphVisualizer.activeListener);

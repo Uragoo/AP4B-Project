@@ -28,6 +28,7 @@ public class Application {
 						int sourceId = Integer.parseInt(parts[0]);
 						int targetId = Integer.parseInt(parts[1]);
 						graph.addEdge(sourceId, targetId);
+						//graph.addEdge(targetId, sourceId);
 					}
 				}
 			} catch (IOException e) {
