@@ -12,6 +12,8 @@ public class GraphVisualizer extends JPanel {
 	private boolean isDragging = false;
 	public MouseListener activeListener;
 	private List<Node> shortestPath;
+	public int MAX_HEIGHT = 990;
+	public int MAX_WIDTH = 1760;
 	
 	@SuppressWarnings("static-access")
 	public GraphVisualizer(Graph graph) {
@@ -157,7 +159,7 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
-	public void selectVertex() {
+	/*public void selectVertex(Node clickedNode) {
 		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
@@ -170,10 +172,7 @@ public class GraphVisualizer extends JPanel {
 				}
 			}
 		};
-		removeMouseListener(activeListener);
-		activeListener = ml;
-		addMouseListener(ml);
-	}
+	}*/
 	
 	public void removeVertex() {
 		MouseListener ml = new MouseAdapter() {
@@ -262,7 +261,7 @@ public class GraphVisualizer extends JPanel {
 	}
 	
 	private void handleNodeSelection(Node node) {
-		//System.out.print("Node clicked\n");
+		
 	}
 	
 	private void handleNodeHover(Node node) {
@@ -333,6 +332,28 @@ public class GraphVisualizer extends JPanel {
 			g2d.fillOval(x - node.RADIUS, y - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);			
 		}
 		
+		//On dessine les coordonnées des sommets
+		for (Node node : nodes) {
+			int x = node.getX();
+			int y = node.getY();
+			int xInit = node.getInitX();
+			int yInit = node.getInitY();
+			String s = "x = " + xInit + " y = " + yInit;
+			g2d.setColor(Color.BLACK);
+			g2d.drawString(s, x - node.RADIUS, y - node.RADIUS - 10);
+		}
+		
+		//On affiche la liste des commandes
+		int l = MAX_WIDTH - 500;
+		int h = 200;
+		g2d.setColor(Color.BLACK);
+		g2d.drawString("Press 'a' and left click to add a new vertex", l, h);
+		g2d.drawString("Press 'r' and click on a vertex to remove it", l, h+15);
+		g2d.drawString("Press 'e' and click on 2 different vertex to\n create an edge", l, h+15*2);
+		g2d.drawString("Press 't' and click on 2 vertex to remove the edge linking them", l, h+15*3);
+		g2d.drawString("Press 's' and click on a vertex to set the starting vertex", l, h+15*4);
+		g2d.drawString("Press 'f' and click on a vertex to set the ending vertex", l, h+15*5);
+		g2d.drawString("Press 'p' when there are a starting and ending vertex to highlight the shortest path", l, h+15*6);
 		
 	}
 

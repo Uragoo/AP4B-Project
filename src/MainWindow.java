@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -6,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -13,6 +16,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainWindow extends JFrame implements KeyListener {
 	private GraphVisualizer graphVisualizer;
 	private MenuBar menuBar;
+	public JPanel panelInfo;
+	public int MAX_HEIGHT = 990;
+	public int MAX_WIDTH = 1760;
 	
 	public MainWindow(GraphVisualizer graphVisualizer) {
 		this.graphVisualizer = graphVisualizer;
@@ -28,7 +34,7 @@ public class MainWindow extends JFrame implements KeyListener {
 		catch (IllegalAccessException e) {}
 		
 		setTitle("Graph Editor");
-		setSize(1760, 990);
+		setSize(MAX_WIDTH, MAX_HEIGHT);
 		setResizable(true);
 		
 		getContentPane().add(graphVisualizer);
@@ -58,16 +64,26 @@ public class MainWindow extends JFrame implements KeyListener {
 			}
 		});
 		
-		addKeyListener(this);
+		int h,l;
+		h = 990;
+		l = 500;
+		panelInfo = new PanelInfo();
+		panelInfo.setPreferredSize(new Dimension(l, h));
+		//getContentPane().add(panelInfo, BorderLayout.EAST);
+
 		
+		addKeyListener(this);
+			
 		setVisible(true);
 	}
+	
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyChar()) {
 		case 'a':
+			System.out.print("ALED");
 			graphVisualizer.addVertex();
 			break;
 		case 'e':
@@ -89,7 +105,6 @@ public class MainWindow extends JFrame implements KeyListener {
 			graphVisualizer.getShortestPath();
 			break;
 		case '':
-			System.out.print("ALLO ??");
 			removeMouseListener(graphVisualizer.activeListener);
 			graphVisualizer.activeListener = null;
 			break;
