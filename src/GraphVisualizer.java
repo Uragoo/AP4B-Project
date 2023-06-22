@@ -15,24 +15,30 @@ public class GraphVisualizer extends JPanel {
 	public int MAX_HEIGHT = 990;
 	public int MAX_WIDTH = 1760;
 	
+	//Contructor
 	@SuppressWarnings("static-access")
 	public GraphVisualizer(Graph graph) {
 		this.graph = graph;
 		
+		//Listen to the mouse actions
 		addMouseListener(new MouseAdapter() {
+			//When the mouse is pressed, start the dragging process where the user can move the graph
 			public void mousePressed(MouseEvent e) {
 				initialMouseX = e.getX();
 				initialMouseY = e.getY();
 				isDragging = true;
 			}
 			
+			//When the mouse is release, stop the dragging process
 			public void mouseReleased(MouseEvent e) {
 				isDragging = false;
 			}
 			
 		});
 		
+		//Listen to the movements of the mouse
 		addMouseMotionListener(new MouseAdapter() {
+			//When the mouse is dragged, move the graph following the mouse movements
 			public void mouseDragged(MouseEvent e) {
 				if (isDragging) {
 					int dx = e.getX() - initialMouseX;
@@ -46,6 +52,7 @@ public class GraphVisualizer extends JPanel {
 				}
 			}
 			
+			//When the mouse moves, check if it hovers a node and display its id
 			public void mouseMoved(MouseEvent e) {
 				int x = e.getX();
 		        int y = e.getY();
@@ -59,7 +66,9 @@ public class GraphVisualizer extends JPanel {
 			}
 		});
 		
+		//Listen to the mouse wheel
 		addMouseWheelListener(new MouseAdapter() {
+			//When the wheel is moved, zoom or dezoom
             public void mouseWheelMoved(MouseWheelEvent e) {
                 int notches = e.getWheelRotation();
                 if (notches < 0) {
@@ -74,7 +83,7 @@ public class GraphVisualizer extends JPanel {
 		setVisible(true);
 	}
 
-	
+	//Getters and setters
 	public static Graph getGraph() {
 		return graph;
 	}
@@ -88,6 +97,10 @@ public class GraphVisualizer extends JPanel {
 		return maxId + 1;
 	}
 	
+	/**
+	 * Sets the new starting node for the shortest path
+	 * 
+	 */
 	public void setStartNode() {
 		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -108,6 +121,10 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
+	/**
+	 * Sets the new ending node for the shortest path
+	 * 
+	 */
 	public void setEndNode() {
 		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -128,6 +145,14 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
+	/**
+	 * Checks if the mouse is inside a node
+	 * 
+	 * @param node, the node we want to verify if the mouse is in
+	 * @param x and y, the coordinates of the mouse
+	 * 
+	 * @return true if the mouse is inside the node, else false
+	 */
 	private boolean isInsideNode(Node node, int x, int y) {
 		int nodeRadius = node.RADIUS;
 		int nodeX = node.getX();
@@ -137,6 +162,10 @@ public class GraphVisualizer extends JPanel {
 		return x <= nodeX + nodeRadius && x >= nodeX - nodeRadius && y <= nodeY + nodeRadius && y >= nodeY - nodeRadius;
 	}
 	
+	/**
+	 * Adds a new vertex on the graph
+	 * 
+	 */
 	public void addVertex() {
 		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -159,21 +188,10 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
-	/*public void selectVertex(Node clickedNode) {
-		MouseListener ml = new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-				
-				for (Node node : graph.getNodes()) {
-					if (isInsideNode(node, x, y)) {
-						removeMouseListener(this);
-					}
-				}
-			}
-		};
-	}*/
-	
+	/**
+	 * Removes a vertex from the graph
+	 * 
+	 */
 	public void removeVertex() {
 		MouseListener ml = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -195,6 +213,10 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
+	/**
+	 * Adds an edge between 2 vertex of the graph
+	 * 
+	 */
 	public void addEdge() {
 		MouseListener ml = new MouseAdapter() {
 			Node node1;
@@ -235,6 +257,10 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
+	/**
+	 * Removes an edge between 2 nodes from the graph
+	 * 
+	 */
 	public void removeEdge() {
 		MouseListener ml = new MouseAdapter() {
 			Node node1;
@@ -260,10 +286,12 @@ public class GraphVisualizer extends JPanel {
 		addMouseListener(ml);
 	}
 	
-	private void handleNodeSelection(Node node) {
-		
-	}
-	
+	/**
+	 * Display node's id when the mouse hovers it
+	 * 
+	 * @param node, the node we want to display the id
+	 * 
+	 */
 	private void handleNodeHover(Node node) {
 		int nodeId = node.getId();
 		
@@ -274,6 +302,12 @@ public class GraphVisualizer extends JPanel {
 		g2d.drawString(Integer.toString(nodeId), node.getX()-(node.RADIUS/5), node.getY()+(node.RADIUS/5));
 	}
 	
+	/**
+	 * The big display function where we display the graph and all informations
+	 * 
+	 * @param g, the Graphics context in which to paint
+	 * 
+	 */
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -284,7 +318,7 @@ public class GraphVisualizer extends JPanel {
 		List<Node> nodes = graph.getNodes();
 		int nodeRadius = 20;
 		
-		//On dessine les  arrêtes
+		//Displaying the edges
 		List<Node> allNodes = graph.getNodes();
 		for (Node node : allNodes) {
 			List<Node> voisins = graph.getVoisins(node);
@@ -300,6 +334,7 @@ public class GraphVisualizer extends JPanel {
 			}
 		}
 		
+		//Displaying the shortest path if calculated
 		if (shortestPath != null) {
 			for (int i = 0; i < shortestPath.size() - 1; i++) {
 				Node source = shortestPath.get(i);
@@ -309,7 +344,6 @@ public class GraphVisualizer extends JPanel {
 				int y1 = source.getY();
 				int x2 = target.getX();
 				int y2 = target.getY();
-				//System.out.print("" + source.getId() + " " + target.getId() + "\n");
 				
 				g2d.setColor(Color.magenta);
 				g2d.drawLine(x1, y1, x2, y2);
@@ -317,11 +351,12 @@ public class GraphVisualizer extends JPanel {
 		}
 		
 		
-		//On dessine les sommets
+		//Display the nodes
 		for (Node node : nodes) {
 			int x = node.getX();
 			int y = node.getY();
 			
+			//If a starting and/or ending node is defined, color them in a specific color
 			if (node == graph.startNode) {
 				g2d.setColor(Color.GREEN);
 			} else if (node == graph.endNode) {
@@ -332,7 +367,7 @@ public class GraphVisualizer extends JPanel {
 			g2d.fillOval(x - node.RADIUS, y - node.RADIUS, node.RADIUS * 2, node.RADIUS * 2);			
 		}
 		
-		//On dessine les coordonnées des sommets
+		//Displaying the nodes coordinates
 		for (Node node : nodes) {
 			int x = node.getX();
 			int y = node.getY();
@@ -343,7 +378,7 @@ public class GraphVisualizer extends JPanel {
 			g2d.drawString(s, x - node.RADIUS, y - node.RADIUS - 10);
 		}
 		
-		//On affiche la liste des commandes
+		//Displaying the command list
 		int l = MAX_WIDTH - 500;
 		int h = 200;
 		g2d.setColor(Color.BLACK);
@@ -354,10 +389,15 @@ public class GraphVisualizer extends JPanel {
 		g2d.drawString("Press 's' and click on a vertex to set the starting vertex", l, h+15*4);
 		g2d.drawString("Press 'f' and click on a vertex to set the ending vertex", l, h+15*5);
 		g2d.drawString("Press 'p' when there are a starting and ending vertex to highlight the shortest path", l, h+15*6);
+		g2d.drawString("You can Save or Import or Start a new Graph form the file menu on the top left of your screen", l, h+15*8);
 		
 	}
 
-
+	/**
+	 * Gets the shortest path between a starting and ending node
+	 * 
+	 * @return the new file item
+	 */
 	public void getShortestPath() {
 		if (graph.startNode != null && graph.endNode != null) {
 			shortestPath = null;

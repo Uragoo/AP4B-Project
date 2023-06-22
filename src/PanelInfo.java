@@ -11,20 +11,29 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
+/**
+ * This part was finally abandonned and we display the command list directly inside the graph
+ *
+ */
 @SuppressWarnings("serial")
 public class PanelInfo extends JPanel{
 	private JLabel lInfo;
 	private DefaultListModel<String> liCommandes;
 	private JList<?> jliInfo;
 	private JScrollPane spInfo;
-
+	
+	//Constructor
 	public PanelInfo() {
 		super();
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		//Display the borders of the JPanel
 		Border lineBorder = BorderFactory.createLineBorder(Color.black, 1);
 		setBorder(lineBorder);
 		setBackground(Color.LIGHT_GRAY);
+		
+		//Add a label for the JScrollPane
 		String listeCommande = "Liste des commandes :";
 		lInfo = new JLabel(listeCommande);
 		lInfo.setFont(lInfo.getFont().deriveFont(Font.BOLD));
@@ -38,6 +47,7 @@ public class PanelInfo extends JPanel{
 		spInfo.setPreferredSize(new Dimension(450, screenSize.height - 400));
 		add(spInfo);
 
+		//Adds the command list in the list
 		liCommandes.addElement(" ");
 		liCommandes.addElement("Press 'a' and left click to add a new vertex");
 		liCommandes.addElement("Press 'r' and click on a vertex to remove it");

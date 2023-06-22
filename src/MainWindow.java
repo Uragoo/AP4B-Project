@@ -15,15 +15,16 @@ import javax.swing.UnsupportedLookAndFeelException;
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements KeyListener {
 	private GraphVisualizer graphVisualizer;
-	private MenuBar menuBar;
+	public MenuBar menuBar;
 	public JPanel panelInfo;
 	public int MAX_HEIGHT = 990;
 	public int MAX_WIDTH = 1760;
 	
+	//Constructor
 	public MainWindow(GraphVisualizer graphVisualizer) {
 		this.graphVisualizer = graphVisualizer;
 		
-		//Récuperation de l'apparence du système d'exploitation pour l'exportation de fichier notamment
+		//Getting the OS style for the file selection
 		String nativeLF = UIManager.getSystemLookAndFeelClassName();
 		try {
 			UIManager.setLookAndFeel(nativeLF);
@@ -33,13 +34,17 @@ public class MainWindow extends JFrame implements KeyListener {
 		catch (UnsupportedLookAndFeelException e) {}
 		catch (IllegalAccessException e) {}
 		
+		//Set the window caracteristics
 		setTitle("Graph Editor");
 		setSize(MAX_WIDTH, MAX_HEIGHT);
 		setResizable(true);
 		
 		getContentPane().add(graphVisualizer);
 		
+		//Create and add the MenuBar
 		menuBar = new MenuBar();
+		//Listen to the Add Vertex Menu from the Menu Bar
+		//Allow the user to add a new vertex to the graph
 		menuBar.getAddVertex().addActionListener(new ActionListener() {
 			
 			@Override
@@ -47,43 +52,29 @@ public class MainWindow extends JFrame implements KeyListener {
 				graphVisualizer.addVertex();
 			}
 		});
-		/*menuBar.getImportItem().addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent ev) {
-				graphVisualizer = new GraphVisualizer(Application.getGraphFromFile());
-				repaint();
-			}
-			
-		});*/
 		
 		setJMenuBar(menuBar);
 		
+		//Listen to the exit button of the window
+		//Close the window if it's pressed
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				dispose();
 			}
 		});
 		
-		int h,l;
-		h = 990;
-		l = 500;
-		panelInfo = new PanelInfo();
-		panelInfo.setPreferredSize(new Dimension(l, h));
-		//getContentPane().add(panelInfo, BorderLayout.EAST);
-
-		
+		//Add a listener for the keyboard
 		addKeyListener(this);
 			
 		setVisible(true);
 	}
 	
-
+	//Listen if a keyboard key is pressed
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		//Depeding on the key pressed, allow the user to edit the graph
 		switch (e.getKeyChar()) {
 		case 'a':
-			System.out.print("ALED");
 			graphVisualizer.addVertex();
 			break;
 		case 'e':

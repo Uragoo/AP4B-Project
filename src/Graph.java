@@ -14,11 +14,13 @@ public class Graph {
 	private int x;
 	private int y;
 	
+	//Constructors
 	public Graph() {
 		nodes = new HashMap<>();
 		adjacents = new HashMap<>();
 	}
 	
+	//Getters and setters
 	public int getX() {
         return x;
     }
@@ -51,8 +53,14 @@ public class Graph {
 		return new ArrayList<>(voisins);
 	}
 	
+	/**
+	 * Moves the graph following the dragged mouse
+	 *  
+	 *  @param dx and dy, the coordinates where the graph should be moved
+	 *  
+	 */
 	public void moveGraph(int dx, int dy) {
-    	x += dx;
+    	x = dx;
     	y = dy;
     	
     	for (Node node : nodes.values()) {
@@ -60,12 +68,25 @@ public class Graph {
     	}
     }
 	
+	/**
+	 * Adds a new node
+	 *  
+	 *  @param x and y, the coordinates of the node
+	 *  @param id, the id of the node
+	 *  
+	 */
 	public void addNode(int id, int x, int y) {
 		Node node = new Node(id, x, y);
 		nodes.put(id,  node);
 		adjacents.put(node,  new ArrayList<>());
 	}
 	
+	/**
+	 * Removes a node
+	 *  
+	 *  @param n, the node to remove
+	 *  
+	 */
 	public void removeNode(Node n) {
 		for (int i = 1; i < nodes.size(); i++) {
 			List<Node> voisins = adjacents.get(getNode(i));
@@ -76,6 +97,12 @@ public class Graph {
 		nodes.remove(n.getId());
 	}
 	
+	/**
+	 * Adds an edge between 2 nodes
+	 *  
+	 *  @param sourceId and targetId, respectively the source node and the target node from where the edge will be created
+	 *  
+	 */
 	public void addEdge(int sourceId, int targetId) {
 		Node source = nodes.get(sourceId);
 		Node target = nodes.get(targetId);
@@ -86,6 +113,12 @@ public class Graph {
 		}
 	}
 	
+	/**
+	 * Removes an edge between 2 nodes
+	 *  
+	 *  @param node1 and node2, the nodes linked by the edge to remove
+	 *  
+	 */
 	public void removeEdge(Node node1, Node node2) {
 		List<Node> voisins1 = adjacents.get(node1);
 		List<Node> voisins2 = adjacents.get(node2);
@@ -93,6 +126,14 @@ public class Graph {
 		voisins2.remove(node1);
 	}
 	
+	/**
+	 * Gets the weight needed in the shortest path algorithm : basically the distance between the 2 nodes
+	 *  
+	 *  @param source and target, the 2 nodes we want to get the distance from
+	 *  
+	 *  @return the distance between the 2 nodes
+	 *  
+	 */
 	public double getWeight(Node source, Node target) {
 		int x1 = source.getX();
 		int y1 = source.getY();
@@ -102,6 +143,15 @@ public class Graph {
 		return Math.sqrt((x2 - x1)^2 + (y2 - y1)^2);
 	}
 	
+	/**
+	 * The recursive part of the shortest path algorithm which will return the final shortest path
+	 *  
+	 *  @param start and end, respectively the starting and ending node from the path
+	 *  @param predecessors, the map containing the nodes composing the shortest path ordered form the end to the start
+	 *  
+	 *  @return the final shortest path in order from the start to the end
+	 *  
+	 */
 	private List<Node> shortestPathRecursive(Node start, Node end, Map<Node, Node> predecessors) {
 		if (start == end) {
 			List<Node> path = new ArrayList<>();
@@ -114,7 +164,14 @@ public class Graph {
 		return path;
 	}
 	
-	//Algorithme de plus court chemin utilisant l'algorithme de Dijkstra
+	/**
+	 * Shortest path algorithm using the Dijkstra algorithm
+	 *  
+	 *  @param startNode and endNode, respectively the starting and ending node from the path
+	 *  
+	 *  @return the shortest path between the starting and ending node
+	 *  
+	 */
 	public List<Node> shortestPath(Node startNode, Node endNode) {
 		Map<Node, Integer> distances = new HashMap<>();
 		Map<Node, Node> predecessors = new HashMap<>();
@@ -124,39 +181,21 @@ public class Graph {
 		}
 		distances.put(startNode, 0);
 		queue.add(startNode);
-		//predecessors.put(null, startNode);
 		while (!queue.isEmpty()) {
 			Node current = queue.poll();
-					
-			//Node lastVoisin = null;
-			
+								
 			for (Node voisin : getVoisins(current)) {
 				int distance = distances.get(current) + (int) getWeight(current, voisin);
 				
 				if (distance < distances.get(voisin)) {
 					
 					distances.put(voisin, distance);
-					/*if (lastVoisin != null) {
-						System.out.print("" + current.getId() + "  " + voisin.getId() + "  "+ lastVoisin.getId() + "\n");
-						predecessors.remove(lastVoisin);
-					}*/
 					predecessors.put(voisin, current);
-					//queue.remove(voisin);
 					queue.add(voisin);
-					//lastVoisin = voisin;
 				}
 			}
 		}
-		
-		/*List<Node> path = new ArrayList<>();
-		Node current = endNode;
-		while (current != null) {
-			path.add(0, current);
-			System.out.print("" + current.getId() + "\n");
-			current = predecessors.get(current);
-		}
-		//path.add(startNode);*/
-		
+			
 		List<Node> path = shortestPathRecursive(startNode, endNode, predecessors);
 		
 		return path;

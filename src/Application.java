@@ -8,14 +8,20 @@ import java.util.List;
 import javax.swing.JFileChooser;
 
 public class Application {
-	public static Graph getGraphFromFile(String file) {
+	
+	/**
+	 * Gets a graph chosen by the user from a txt file in the computer.
+	 *  
+	 * @return the imported graph
+	 */
+	public static Graph getGraphFromFile() {
 		Graph graph = new Graph();
 		
-		//JFileChooser fileChooser = new JFileChooser();
-		//fileChooser.setSelectedFile(new File("fileToSave.txt"));
-		//int retrival = fileChooser.showSaveDialog(GraphEditor.mainWindow);
-		//if (retrival == JFileChooser.APPROVE_OPTION) {
-			try (BufferedReader reader = new BufferedReader(new FileReader(file))) { //fileChooser.getSelectedFile()
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setSelectedFile(new File("fileToSave.txt"));
+		int retrival = fileChooser.showSaveDialog(GraphEditor.mainWindow);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(fileChooser.getSelectedFile()))) {
 				String line;
 				while ((line = reader.readLine()) != null) {
 					String[] parts = line.split(" ");
@@ -28,16 +34,21 @@ public class Application {
 						int sourceId = Integer.parseInt(parts[0]);
 						int targetId = Integer.parseInt(parts[1]);
 						graph.addEdge(sourceId, targetId);
-						//graph.addEdge(targetId, sourceId);
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		//}
+		}
 		return graph;
 	}
 	
+	/**
+	 * Save the current graph in a txt file chosen by the user
+	 *  
+	 *  @param graph, the graph to save
+	 *  
+	 */
 	public static void saveGraphInFile(Graph graph) {
 		try {
 			JFileChooser fileChooser = new JFileChooser();

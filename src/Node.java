@@ -7,6 +7,7 @@ public class Node {
 	private int x;
 	private int y;
 	
+	//Constructor
 	public Node(int id, int x, int y) {
 		this.id = id;
 		this.initX = x;
@@ -15,6 +16,7 @@ public class Node {
 		this.y = this.initY;
 	}
 	
+	//Getters and setters
 	public int getId() {
 		return id;
 	}
@@ -43,6 +45,11 @@ public class Node {
 		this.y = y;
 	}
 	
+	/**
+	 * Moves the node
+	 *
+	 * @param dx and dy, the delta of the coordinates we need to add to move the node
+	 */
 	public void move(int dx, int dy) {
 		x += dx;
 		y += dy;
